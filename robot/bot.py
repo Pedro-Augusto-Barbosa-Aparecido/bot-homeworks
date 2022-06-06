@@ -16,7 +16,7 @@ class Bot:
     def __init__(self, url: str = None) -> None:
         logger.debug("Initialising bot!")
         self.__options = ChromeOptions()
-        self.__options.add_argument('headless')
+        # self.__options.add_argument('headless')
 
         self._url = url
         self.__driver: Chrome = None

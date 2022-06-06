@@ -83,10 +83,16 @@ class HomeWorkManager(Bot):
             ).find_elements(By.CLASS_NAME, 'assignment-list-card-link__2tVU3')
 
             logger.info("Getting all homeworks")
+
+            subject_names = []
+            logger.info("Get Subjects names")
+            for homework in homeworks:
+                subject_names.append(homework.find_element(By.CLASS_NAME, 'assignment-card-class-name-text__37Hag')
+                                     .text)
+
+            logger.info("Getting information from all homeworks")
             for index, homework in enumerate(homeworks):
-                logger.info("Get Subject name")
-                subject_name = homework.find_element(By.CLASS_NAME, 'assignment-card-class-name-text__37Hag').text
-                print(f"Getting homework of subject: {subject_name}")
+                print(f"Getting homework of subject: {subject_names[index]}")
                 homework.click()
 
                 self._logging_time_sleep(10, f"Page of homework {index + 1} load")
@@ -107,7 +113,7 @@ class HomeWorkManager(Bot):
                         "finish_date": dates[1]
                     },
                     "homework_title": title,
-                    "subject": subject_name
+                    "subject": subject_names[index]
                 })
 
                 logger.info("Return for subjects list")
@@ -115,9 +121,9 @@ class HomeWorkManager(Bot):
                                                    '/div[1]/div[1]/div[1]/div/a').click()
                 self.driver.switch_to.default_content()
                 self._logging_time_sleep(15, "Subject list page load")
-                # iframe = self.driver.find_element(By.XPATH, '/html/body/app-caching-container/div/div/extension-tab'
-                #                                             '/div/embedded-page-container/div/iframe')
-                # self.driver.switch_to.frame(iframe)
+                iframe = self.driver.find_element(By.XPATH, '/html/body/app-caching-container/div/div/extension-tab'
+                                                            '/div/embedded-page-container/div/iframe')
+                self.driver.switch_to.frame(iframe)
             self.driver.switch_to.default_content()
         except Exception as e:
             logger.exception(e)
